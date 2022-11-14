@@ -39,7 +39,7 @@ const getAllBooks = (req, res) => {
         if (err) {
             res.status(500).send({ message: err, status: true });
         } else {
-            res.status(200).send({ books, status: true });
+            res.status(200).send({ message: "All books", books, status: true });
         }
     });
 };
