@@ -62,12 +62,46 @@ const getBook = (req, res) => {
 
 // update a single book
 const updateBook = (req, res) => {
+    const { title, author, description, category, purchaseCount, imageUrl, tags } = req.body;
+    let update = {
+        title: title,
+        author: author,
+        description: description,
+        category: category,
+        purchaseCount: purchaseCount,
+        imageUrl: imageUrl,
+        tags: tags
+    }
 
+    bookModel.findByIdAndUpdate(req.params.id, update, { new: true }, (err, book) => {
+        if (err) {
+            res.status(500).send({ message: err, status: true });
+        } else if (!book) {
+            res.status(404).send({ message: "Book not found!!", status: true });
+        } else {
+            book.save((err, result) => {
+                if (err) {
+                    res.status(400).send({ mesage: err, status: true });
+                } else {
+                    res.status(200).send({ message: "Book updated successfully!!", status: true, result });
+                }
+            });
+        };
+    });
 }
 
 // delete a single book
 const deleteBook = (req, res) => {
-
+    const id = req.params.id;
+    bookModel.findByIdAndDelete(id, (err, book) => {
+        if (err) {
+            res.status(500).send({ message: err, status: false });
+        } else if (!book) {
+            res.status(404).send({ message: "Book not found!!", staus: false })
+        } else {
+            res.status(200).send({ message: "Book deleted successfully!!", status: true, book })
+        }
+    })
 }
 
 
