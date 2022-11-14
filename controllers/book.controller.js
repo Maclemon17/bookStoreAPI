@@ -2,7 +2,7 @@ const bookModel = require("../model/books.model");
 
 //Create new book
 const addBook = (req, res) => {
-    const { title, author, description, category, purchaseCount, imageUrl, tags } = req.body;
+    const { title } = req.body;
     console.log(!Object.keys(req.body).length)
 
     // check if request is not an empty object
@@ -11,9 +11,9 @@ const addBook = (req, res) => {
     } else {
         // check if book is already present
         bookModel.findOne({ title: title }, (err, found) => {
-           /*  if (err) {
+            if (err) {
                 res.status(500).send({ message: "Internal server error", status: false, err })
-            } else */ if (found) {
+            } else if (found) {
                 res.send({ message: "Book already exists", status: false });
             } else {
                 // save book
