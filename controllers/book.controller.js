@@ -23,7 +23,7 @@ const addBook = (req, res) => {
                     if (err) {
                         res.status(500).send({ message: "Internal server error", status: false, err });
                     } else {
-                        res.status(200).send({ message: "Book added successfully", status: true });
+                        res.status(200).send({ message: "Book added successfully", status: true, book });
                     }
                 });
             }
@@ -83,7 +83,7 @@ const updateBook = (req, res) => {
                 if (err) {
                     res.status(400).send({ mesage: err, status: true });
                 } else {
-                    res.status(200).send({ message: "Book updated successfully!!", status: true, result });
+                    res.status(200).send({ message: "Book updated successfully!!", status: true, updatedBook: result });
                 }
             });
         };
