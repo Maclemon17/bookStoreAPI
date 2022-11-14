@@ -27,7 +27,7 @@ const addBook = (req, res) => {
                     }
                 });
             }
-        })
+        });
     }
 
 }
@@ -53,7 +53,7 @@ const getBook = (req, res) => {
         if (err) {
             res.status(500).send({ message: err.name, status: false });
         } else if (!book) {
-            res.status(404).send({ message: "Book not found", status: false })
+            res.status(404).send({ message: "Book not found", status: false });
         } else {
             res.status(200).send({ book, status: true });
         }
@@ -97,11 +97,11 @@ const deleteBook = (req, res) => {
         if (err) {
             res.status(500).send({ message: err, status: false });
         } else if (!book) {
-            res.status(404).send({ message: "Book not found!!", staus: false })
+            res.status(404).send({ message: "Book not found!!", staus: false });
         } else {
-            res.status(200).send({ message: "Book deleted successfully!!", status: true, book })
+            res.status(200).send({ message: "Book deleted successfully!!", status: true, book });
         }
-    })
+    });
 }
 
 
