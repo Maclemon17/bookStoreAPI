@@ -14,18 +14,21 @@ const addBook = (req, res) => {
             if (err) {
                 res.status(500).send({ message: "Internal server error", status: false, err })
             } else if (found) {
-                res.send({ message: "Book already exists", status: false });
+                res.send({ message: `Book ${found.title} already exists`, status: false });
             } else {
                 // save book
                 const newBook = new bookModel(req.body);
-
-                newBook.save(err => {
-                    if (err) {
-                        res.status(500).send({ message: "Internal server error", status: false, err });
-                    } else {
-                        res.status(200).send({ message: "Book added successfully", status: true, book });
-                    }
-                });
+                try {
+                    newBook.save((err, result) => {
+                        if (err) {
+                            res.status(500).send({ message: "Internal server error", status: false, err });
+                        } else {
+                            res.status(200).send({ message: "Book added successfully", status: true, book: result });
+                        }
+                    });
+                } catch (error) {
+                    console.log(error)
+                }
             }
         });
     }
@@ -38,8 +41,11 @@ const getAllBooks = (req, res) => {
     bookModel.find({}, (err, books) => {
         if (err) {
             res.status(500).send({ message: err, status: true });
+        } else if (!books.length) {
+            res.status(404).send({ message: "No record found, books is empty add books", status: false })
         } else {
-            res.status(200).send({ message: "All books", books, status: true });
+            res.status(200).send({ message: "All books", total: books.length, books, status: true });
+            // console.log(r)
         }
     });
 };
@@ -75,13 +81,13 @@ const updateBook = (req, res) => {
 
     bookModel.findByIdAndUpdate(req.params.id, update, { new: true }, (err, book) => {
         if (err) {
-            res.status(500).send({ message: err, status: true });
+            res.status(500).send({ message: "Internal server error", errMsg: err.name, status: false });
         } else if (!book) {
-            res.status(404).send({ message: "Book not found!!", status: true });
+            res.status(404).send({ message: "Book not found!!", status: false });
         } else {
             book.save((err, result) => {
                 if (err) {
-                    res.status(400).send({ mesage: err, status: true });
+                    res.status(400).send({ mesage: err, status: false });
                 } else {
                     res.status(200).send({ message: "Book updated successfully!!", status: true, updatedBook: result });
                 }
